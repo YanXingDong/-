@@ -3,7 +3,37 @@ package bank;
 import java.util.Scanner;
 public class Bank {
     int account;
-    private static User user;
+    private static User user = new User();
+    public int show(){
+        System.out.println("欢迎来到网上银行！");
+        System.out.println("请输入您要进行的操作：1.登录 2.注册");
+        Scanner input = new Scanner(System.in);
+        int x=input.nextInt();
+        String st = input.nextLine();
+        return x;
+    }
+    public void register(){
+        DBUtils dbUtil = DBUtils.getInstance();
+        Scanner input = new Scanner(System.in);
+        System.out.println("请输入此卡所要预留手机号:");
+        String call = input.nextLine();
+        user.setCall(call);
+        System.out.println("请输入您要注册的用户名:");
+        String userName = input.nextLine();
+        user.setUserName(userName);
+        System.out.println("请输入您要注册的卡号:");
+        String ID = input.nextLine();
+        user.setCardId(ID);
+        System.out.println("请输入您的密码:");
+        String Pwd = input.nextLine();
+        user.setCardPwd(Pwd);
+        user.setAccount(0);
+        try {
+            dbUtil.setUsers(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void login(){
         System.out.println("欢迎来到网上银行！");
         DBUtils dbUtil = DBUtils.getInstance();
@@ -84,9 +114,20 @@ public class Bank {
         //see 余额
         System.out.println("您的卡号为:"+user.getCardId()+"的银行卡余额为:"+user.getAccount());
     }
-    public static void main(String[] args) {
+    public static void main(String[] args)throws Exception {
         Bank b = new Bank();
-        b.login();
+        //b.login();
+        switch (b.show()){
+            case 1:
+                b.login();
+                break;
+            case 2:
+                b.register();
+                System.out.println("注册成功！");
+                break;
+            default:
+                System.out.println("cuowu");
+        }
         b.operate();
     }
 }
